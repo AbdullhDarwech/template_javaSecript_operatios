@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrix Operations</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+  <div class="container">
+
+    <div class="matrix-container">
+    <div class="matrix" id="matrixA">
+       
+      <h2 class="title" > A</h2>
+            <div class="hedear">
+
+                <input type="number" id="inputA" placeholder="Add number to A">
+                <button class="btn" onclick="addToArray('A')">+</button>
+            </div>
+                
+      <ul id="arrayA">
+  
+      </ul>
+    </div>
+    <div class="matrix" id="matrixB">
+        <h2 class="title" > B</h2>
+            <div class="hedear">
+                <input type="number" id="inputB" placeholder="Add number to B">
+                <button class="btn" onclick="addToArray('B')">+</button>
+              </div>
+              <ul id="arrayB"></ul>
+            </div>
+          </div>
+   <div class="main">
+   <div class="result">
+    <h3 class="title"> C</h3>
+    <ul id="arrayC"></ul>
+</div>
+    <div class="operations">   
+    <button onclick="findCommon()"><i class='bx bx-calculator'></i>  Common Elements</button>
+    <button onclick="findDifference()"><i class='bx bx-calculator'></i>   Difference</button>
+    <button onclick="sumPairs()"><i class='bx bx-calculator'></i> Sum Pairs</button>
+    <button onclick="findTopNumbers()"><i class='bx bx-calculator'></i>Top Numbers</button>
+    <button onclick="findEvens()"><i class='bx bx-calculator'></i>Even Numbers</button>
+    <button onclick="findIndexes()"><i class='bx bx-calculator'></i>Find Indexes</button>
+    <button onclick="mergeOddIndexes()"><i class='bx bx-calculator'></i>Merge Odd Indexes</button>
+    <button onclick="reduceSum()"><i class='bx bx-calculator'></i>Reduce Sum</button>
+</div>
+</div>
+  </div>
+<script src="main.js"></script>
+</body>
+</html>
