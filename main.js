@@ -1,107 +1,101 @@
-// Arrays
-const arrayA = [];
-const arrayB = [];
-const arrayC = [];
+const categoryFilter = document.getElementById("categoryFilter");
+const sortPriceBtn = document.getElementById("sortPrice");
+const sortRatingBtn = document.getElementById("sortRating");
+const searchInput = document.getElementById("searchInput");
+const productsGrid = document.getElementById("productsGrid");
+const spinner = document.getElementById("spinner");
 
-const updateUI = (array, elementId) => {
-  const container = document.getElementById(elementId);
-  container.innerHTML = "";
-  array.forEach((num, index) => {
-    const li = document.createElement("li");
-    li.textContent = num;
-    li.ondblclick = () => {
-      if (confirm(`Are you sure you want to delete ${num}?`)) {
-        array.splice(index, 1);
-        updateUI(array, elementId);
-      }
-    };
-    container.appendChild(li);
+let products = [];
+let filteredProducts = [];
+let sortBy = ""; 
+let searchQuery = ""; 
+
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get("https://fakestoreapi.com/products");
+    products = response.data;
+    filteredProducts = [...products];
+
+    populateCategoryFilter(products);
+    applyFilters();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  } finally {
+    spinner.style.display = "none";
+  }
+};
+
+const populateCategoryFilter = (prods) => {
+  const categories = [...new Set(prods.map((product) => product.category))];
+  categories.forEach((category) => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    categoryFilter.appendChild(option);
   });
 };
 
+const applyFilters = () => {
 
-const addToArray = (matrix) => {
-  const input = document.getElementById(`input${matrix}`);
-  const value = Number(input.value);
-  if (isNaN(value)) {
-    alert("Please enter a valid number!");
-    return;
-  }
-  const array = matrix === "A" ? arrayA : arrayB;
-  if (array.length >= 9) {
-    alert("Matrix is full. Cannot add more elements.");
-    return;
-  }
-  array.push(value);
-  updateUI(array, `array${matrix}`);
-  input.value = "";
-};
-
-
-const findCommon = () => {
-  arrayC.length = 0;
-  arrayC.push(...arrayA.filter((num) => arrayB.includes(num)));
-  updateUI(arrayC, "arrayC");
-};
-
-const findDifference = () => {
-  arrayC.length = 0;
-  arrayC.push(...arrayA.filter((num) => !arrayB.includes(num)));
-  arrayC.push(...arrayB.filter((num) => !arrayA.includes(num)));
-  updateUI(arrayC, "arrayC");
-};
-
-const sumPairs = () => {
-  arrayC.length = 0;
-  const maxLength = Math.max(arrayA.length, arrayB.length);
-  for (let i = 0; i < maxLength; i++) {
-    arrayC.push((arrayA[i] || 0) + (arrayB[i] || 0));
-  }
-  updateUI(arrayC, "arrayC");
-};
-
-const findTopNumbers = () => {
-  arrayC.length = 0;
-  const merged = [...arrayA, ...arrayB].sort((a, b) => a - b);
-  arrayC.push(...merged.slice(0, 9));
-  updateUI(arrayC, "arrayC");
-};
-
-const findEvens = () => {
-  arrayC.length = 0;
-  arrayC.push(...[...arrayA, ...arrayB].filter((num) => num % 2 === 0));
-  updateUI(arrayC, "arrayC");
-};
-
-const findIndexes = () => {
-  arrayC.length = 0;
-  arrayA.forEach((num) => {
-    const indexes = [];
-    arrayB.forEach((val, index) => {
-      if (num === val) {
-        indexes.push(index);
-      }
-    });
-
-    if (indexes.length >= 2) {
-      arrayC.push(`Indexes for ${num}: ${indexes.join(", ")}`);
-    } else {
-      arrayC.push(...indexes);
-    }
+  filteredProducts = products.filter((product) => {
+    const matchesCategory =
+      !categoryFilter.value || product.category === categoryFilter.value;
+    const matchesSearch =
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
   });
-  updateUI(arrayC, "arrayC");
+
+  // Sort if necessary
+  if (sortBy === "price") {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (sortBy === "rating") {
+    filteredProducts.sort((a, b) => b.rating.rate - a.rating.rate);
+  }
+
+  displayProducts(filteredProducts);
 };
 
-const mergeOddIndexes = () => {
-  arrayC.length = 0;
-  const temp = [...arrayA, ...arrayB];
-  arrayC.push(...temp.filter((_, index) => index % 2 !== 0));
-  updateUI(arrayC, "arrayC");
+const displayProducts = (products) => {
+  productsGrid.innerHTML = products
+    .map(
+      (product) => `
+    <div class="col-md-3 col-sm-4">
+      <div class="card h-100">
+        <div class="card-img-container">
+          <img src="${product.image}" class="card-img-top" alt="${
+        product.title
+      }">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">${product.title.substring(0, 20)}</h5>
+          <p class="card-text">${product.description.substring(0, 40)}...</p>
+        </div>
+        <div class="card-footer">
+          <p>Price: $${product.price}</p>
+          <p>Rating: $${product.rating.rate} ⭐</p>
+        </div>
+      </div>
+    </div>`
+    )
+    .join("");
 };
 
-const reduceSum = () => {
-  arrayC.length = 0;
-  const sum = [...arrayA, ...arrayB].reduce((acc, num) => acc + num, 0);
-  arrayC.push(sum);
-  updateUI(arrayC, "arrayC");
-};
+categoryFilter.addEventListener("change", () => {
+  applyFilters();
+});
+sortPriceBtn.addEventListener("click", () => {
+  sortBy = "price";
+  applyFilters();
+});
+sortRatingBtn.addEventListener("click", () => {
+  sortBy = "rating";
+  applyFilters();
+});
+searchInput.addEventListener("input", (e) => {
+  searchQuery = e.target.value;
+  applyFilters();
+});
+
+// Fetch products on load
+fetchProducts();

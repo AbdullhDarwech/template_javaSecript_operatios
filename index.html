@@ -3,54 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix Operations</title>
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link rel="stylesheet" href="css/style.css">
+  <title>Product List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
-  <div class="container">
-
-    <div class="matrix-container">
-    <div class="matrix" id="matrixA">
-       
-      <h2 class="title" > A</h2>
-            <div class="hedear">
-
-                <input type="number" id="inputA" placeholder="Add number to A">
-                <button class="btn" onclick="addToArray('A')">+</button>
-            </div>
-                
-      <ul id="arrayA">
-  
-      </ul>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Product List</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="matrix" id="matrixB">
-        <h2 class="title" > B</h2>
-            <div class="hedear">
-                <input type="number" id="inputB" placeholder="Add number to B">
-                <button class="btn" onclick="addToArray('B')">+</button>
-              </div>
-              <ul id="arrayB"></ul>
-            </div>
-          </div>
-   <div class="main">
-   <div class="result">
-    <h3 class="title"> C</h3>
-    <ul id="arrayC"></ul>
-</div>
-    <div class="operations">   
-    <button onclick="findCommon()"><i class='bx bx-calculator'></i>  Common Elements</button>
-    <button onclick="findDifference()"><i class='bx bx-calculator'></i>   Difference</button>
-    <button onclick="sumPairs()"><i class='bx bx-calculator'></i> Sum Pairs</button>
-    <button onclick="findTopNumbers()"><i class='bx bx-calculator'></i>Top Numbers</button>
-    <button onclick="findEvens()"><i class='bx bx-calculator'></i>Even Numbers</button>
-    <button onclick="findIndexes()"><i class='bx bx-calculator'></i>Find Indexes</button>
-    <button onclick="mergeOddIndexes()"><i class='bx bx-calculator'></i>Merge Odd Indexes</button>
-    <button onclick="reduceSum()"><i class='bx bx-calculator'></i>Reduce Sum</button>
-</div>
-</div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+    <h1 class="text-center mb-4">Products</h1>
+
+    <!-- Filters -->
+    <div class="filter-section mb-4">
+      <select id="categoryFilter" class="form-select">
+        <option value="">All Categories</option>
+      </select>
+      <button id="sortPrice" class="btn btn-primary">Sort by Price</button>
+      <button id="sortRating" class="btn btn-secondary">Sort by Rating</button>
+      <input id="searchInput" type="text" class="form-control" placeholder="Search by name or description">
+    </div>
+
+    <!-- Products Grid -->
+    <div id="spinner" class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <div id="productsGrid" class="row g-3"></div>
   </div>
-<script src="main.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
